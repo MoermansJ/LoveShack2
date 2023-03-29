@@ -2,10 +2,8 @@ package be.intecbrussel.jonathan.loveshack.shop;
 
 import be.intecbrussel.jonathan.loveshack.mixables.Ingredient;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class LoveShack {
@@ -29,7 +27,7 @@ public class LoveShack {
     public void order() {
         ArrayList<SmoothieRecipe> orders = new ArrayList<>();
         while (orders.size() < 4) {
-            printSmoothieMenu();
+            System.out.println(printEnumValues(SmoothieRecipe.values()));
             int userInput = scanner.nextInt();
 
             //checking if userInput has unacceptable value
@@ -43,26 +41,33 @@ public class LoveShack {
             //checking if user has already successfully ordered a custom smoothie
             if (userInput == SmoothieRecipe.CUSTOM_SMOOTHIE.ordinal()
                     && SmoothieRecipe.CUSTOM_SMOOTHIE.getRecipe().length <= 1) {
-                orders.add(orderCustomSmoothie());
-                orders.removeAll(Collections.singleton(null)); //removing possibly failed smoothie
+
+                Optional<SmoothieRecipe> customSmoothie = orderCustomSmoothie();
+
+                if (customSmoothie.isEmpty()) {
+                    System.out.println("Adding custom smoothie recipe failed! Try again?");
+                    continue;
+                }
+
+                orders.add(customSmoothie.get());
             } else {
                 orders.add(allSmoothieOptions[userInput]);
             }
         }
-        printOrderTotal(orders);
+        System.out.println(printOrderTotal(orders));
     }
 
-    private SmoothieRecipe orderCustomSmoothie() {
+    private Optional<SmoothieRecipe> orderCustomSmoothie() {
         ArrayList<Ingredient> customRecipe = createCustomRecipe();
 
         //checking if user created custom recipe correctly
         if (customRecipe.size() <= 1) {
-            return null;
+            return Optional.empty();
         }
 
         //saving custom recipe in CUSTOM_SMOOTHIE enum object
-        SmoothieRecipe.CUSTOM_SMOOTHIE.setRecipe(customRecipe.toArray(new Ingredient[0]));
-        return SmoothieRecipe.CUSTOM_SMOOTHIE;
+        SmoothieRecipe.CUSTOM_SMOOTHIE.setRecipe(customRecipe.toArray(Ingredient[]::new));
+        return Optional.of(SmoothieRecipe.CUSTOM_SMOOTHIE);
     }
 
     private ArrayList<Ingredient> createCustomRecipe() {
@@ -70,7 +75,7 @@ public class LoveShack {
         int userInput;
 
         while (customRecipe.size() <= 4) {
-            printIngredientsMenu();
+            System.out.println(printEnumValues(Ingredient.values()));
             if ((userInput = scanner.nextInt()) == 9) {
                 break;
             }
@@ -80,25 +85,22 @@ public class LoveShack {
         return customRecipe;
     }
 
-    private void printSmoothieMenu() {
-        Stream.of(SmoothieRecipe.values())
-                .forEach(item -> System.out.print(item.ordinal() + ". " + item.name().toLowerCase() + " "));
-        System.out.print("9. SAVE\n");
-    }
+    private String printEnumValues(Object[] values) {
+        String result = "";
 
-    private void printIngredientsMenu() {
-        for (int i = 0; i < allIngredients.length; i++) {
-            System.out.print(i + ". " + allIngredients[i].name().toLowerCase() + " ");
+        for (int i = 0; i < values.length; i++) {
+            result += i + ". " + values[i].toString().toLowerCase() + " ";
         }
-        System.out.print("9. SAVE\n");
+
+        return result + "9. SAVE & EXIT";
     }
 
-    private void printOrderTotal(ArrayList<SmoothieRecipe> orders) {
-        orders.toArray(new SmoothieRecipe[0]);
-
-        //printing items in orders
-        System.out.print("You ordered: ");
-        Stream.of(orders).forEach(System.out::println);
-        System.out.println("orderTotalPrice " + orders.stream().map(SmoothieRecipe::getTotalPrice).reduce(0.0, Double::sum));
+    private String printOrderTotal(ArrayList<SmoothieRecipe> orders) {
+        return "You ordered: "
+                + orders.stream()
+                .map(item -> item.name().toLowerCase())
+                .collect(Collectors.joining(", "))
+                + "\norderTotalPrice: "
+                + orders.stream().mapToDouble(SmoothieRecipe::getTotalPrice).sum();
     }
 }
