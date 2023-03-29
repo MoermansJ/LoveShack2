@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="6d05962e-447f-48df-b987-56ce4cb3150a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/be/intecbrussel/jonathan/loveshack/mixables/MainApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/be/intecbrussel/jonathan/loveshack/mixables/MainApp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/be/intecbrussel/jonathan/loveshack/shop/LoveShack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/be/intecbrussel/jonathan/loveshack/shop/LoveShack.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/be/intecbrussel/jonathan/loveshack/shop/SmoothieRecipe.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/be/intecbrussel/jonathan/loveshack/shop/SmoothieRecipe.java" afterDir="false" />
     </list>

@@ -38,19 +38,21 @@ public class LoveShack {
             }
 
             //branching on userInput
-            //checking if user has already successfully ordered a custom smoothie
-            if (userInput == SmoothieRecipe.CUSTOM_SMOOTHIE.ordinal()
-                    && SmoothieRecipe.CUSTOM_SMOOTHIE.getRecipe().length <= 1) {
-
+            if (userInput == SmoothieRecipe.CUSTOM_SMOOTHIE.ordinal()) {
+                //checking if user has already successfully ordered a custom smoothie
+                if (SmoothieRecipe.CUSTOM_SMOOTHIE.getRecipe().length >= 2) {
+                    System.out.println("Maximum 1 custom smoothie per order!");
+                    continue;
+                }
                 Optional<SmoothieRecipe> customSmoothie = orderCustomSmoothie();
-
                 if (customSmoothie.isEmpty()) {
                     System.out.println("Adding custom smoothie recipe failed! Try again?");
                     continue;
                 }
-
                 orders.add(customSmoothie.get());
+
             } else {
+                //if user picked regular recipe smoothie
                 orders.add(allSmoothieOptions[userInput]);
             }
         }

@@ -35,12 +35,6 @@ public enum SmoothieRecipe {
         }
     }
 
-//    public void setRecippe(Ingredient... recipe) {
-//        if (this.equals(CUSTOM_SMOOTHIE)) {
-//            this.recipe = recipe;
-//        }
-//    }
-
 
     //custom methods
     public double getTotalPrice() {
